@@ -140,6 +140,43 @@ a.btn{display:block}
 :root[data-hell] .nav button.on{color:var(--fg)}
 :root[data-hell] .th.on{border-color:var(--v)}
 [hidden]{display:none!important}
+/* ===== Generationen-Designs (Beta 1.0) ===== */
+:root[data-gen=y]{--bg:#fbf8f6;--card:#ffffff;--card2:#f6f1ee;--line:#ece4df;--fg:#2b2330;--mut:#7d7280}
+:root[data-gen=y] body{background:linear-gradient(180deg,#fdf6f2,#f7f4fb);font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
+:root[data-gen=y] .card{border-radius:20px;box-shadow:0 6px 24px rgba(80,50,90,.07)}
+:root[data-gen=y] .glow{box-shadow:0 10px 30px rgba(80,50,90,.16)}
+:root[data-gen=y] .nav{background:rgba(255,255,255,.94);box-shadow:0 10px 30px rgba(80,50,90,.12)}
+:root[data-gen=y] .nav button.on,:root[data-gen=y] .btn.sec{color:var(--fg)}
+:root[data-gen=y] .bar{background:rgba(0,0,0,.07)}
+:root[data-gen=y] h1{font-weight:650;letter-spacing:-.01em}
+:root[data-gen=x]{--bg:#f3f4f6;--card:#ffffff;--card2:#f3f4f6;--line:#d1d5db;--fg:#111827;--mut:#4b5563}
+:root[data-gen=x] body{background:var(--bg);font-family:system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif}
+:root[data-gen=x] .card{border-radius:10px;border-width:1px;box-shadow:none}
+:root[data-gen=x] .glow{box-shadow:none;border-radius:10px}
+:root[data-gen=x] .btn{border-radius:8px}:root[data-gen=x] .chip{border-radius:8px}
+:root[data-gen=x] .q{border-radius:8px}:root[data-gen=x] .q .ic{border-radius:8px}
+:root[data-gen=x] .nav{left:0;right:0;transform:none;width:100%;bottom:0;border-radius:0;border-width:1px 0 0;background:#fff;box-shadow:0 -2px 10px rgba(0,0,0,.06);padding-bottom:calc(6px + env(safe-area-inset-bottom))}
+:root[data-gen=x] .nav button{font-size:.78rem;border-radius:6px}:root[data-gen=x] .nav button.on{color:var(--fg);background:var(--card2)}
+:root[data-gen=x] .btn.sec{color:var(--fg)}:root[data-gen=x] .bar{background:rgba(0,0,0,.08);border-radius:4px}:root[data-gen=x] .bar>div{border-radius:4px}
+:root[data-gen=x] .fab{border-radius:12px}
+:root[data-gen=boomer]{--bg:#ffffff;--card:#ffffff;--card2:#f4f4f5;--line:#a1a1aa;--fg:#09090b;--mut:#3f3f46}
+:root[data-gen=boomer] body{background:#fff;font-family:system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif}
+:root[data-gen=boomer] *{animation:none!important;transition:none!important}
+:root[data-gen=boomer] .card{border-radius:12px;border-width:2px;box-shadow:none}
+:root[data-gen=boomer] .glow{box-shadow:none;border-radius:12px}
+:root[data-gen=boomer] .btn{border-radius:10px;min-height:56px;font-size:1.08rem}
+:root[data-gen=boomer] .btn.mini{min-height:44px}
+:root[data-gen=boomer] .btn.sec{color:var(--fg);border-width:2px}
+:root[data-gen=boomer] .chip{border-radius:10px;padding:10px 14px;border-width:2px;font-size:1rem}
+:root[data-gen=boomer] .q{border-radius:10px;border:2px solid var(--line);min-height:60px}
+:root[data-gen=boomer] .sm{font-size:.95rem}:root[data-gen=boomer] .mut{color:var(--mut)}
+:root[data-gen] .glow .mut{color:rgba(255,255,255,.92)}:root[data-gen] .glow{color:#fff}
+:root[data-gen=boomer] .nav{left:0;right:0;transform:none;width:100%;bottom:0;border-radius:0;border-width:2px 0 0;background:#fff;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none;padding-bottom:calc(6px + env(safe-area-inset-bottom))}
+:root[data-gen=boomer] .nav button{font-size:.9rem;font-weight:700;color:var(--mut);border-radius:8px;min-height:58px}
+:root[data-gen=boomer] .nav button.on{color:#fff;background:var(--v)}
+:root[data-gen=boomer] input,:root[data-gen=boomer] select{border-width:2px;min-height:52px;font-size:1.05rem}
+:root[data-gen=boomer] .bar{height:16px;background:#e4e4e7}
+:root[data-gen=boomer] .fab{border-radius:14px}
 </style>
 </head>
 <body>
@@ -1062,6 +1099,50 @@ fuerDichEinstellungen = function (root) { _fde(root); const p = profil(); const 
   c.append(h('button', {cls: 'btn sec', style: 'margin-top:8px', on: {click: () => { const d = designAnwenden(p.geb, p.tags); save(); toast('🎨 Design „' + THEMES[d.theme][0] + '“ übernommen'); render(); }}}, '🎨 Design passend zu mir'));
   const sp = h('div', {cls: 'chips', style: 'margin-top:8px'}); [['auto', '🤖 Automatisch'], ['jung', '🎮 Gamer-Sprache'], ['mittel', '🙂 Gemischt'], ['klassisch', '📖 Klassisch Deutsch']].forEach(([id, n]) => sp.append(h('button', {cls: 'chip' + ((S.set.sprache || 'auto') === id ? ' on' : ''), on: {click: () => { S.set.sprache = id; save(); location.reload(); }}}, n)));
   c.append(h('div', {cls: 'sm mut', style: 'margin-top:10px'}, 'Sprache der App'), sp); root.append(c); };
+
+/* ---------- Generationen: Design, Sprache, Beschreibung ---------- */
+const GENERATIONEN = {
+  alpha: ['Generation Alpha', 'ab 2010', 'Mit Smartphone und Tablet aufgewachsen – digital von Anfang an.'],
+  z: ['Generation Z', '1997–2009', 'Die ersten echten Digital Natives: Social Media, Streams und Gaming waren immer da.'],
+  y: ['Millennials (Generation Y)', '1981–1996', 'Den Wechsel von analog zu digital bewusst miterlebt – vom Wählscheibentelefon bis zum Smartphone.'],
+  x: ['Generation X', '1965–1980', 'Geprägt von Wiedervereinigung und dem Beginn der Globalisierung – pragmatisch und unabhängig.'],
+  boomer: ['Babyboomer', '1946–1964', 'Mit Wirtschaftsaufschwung und Fleiß groß geworden – Erfahrung ist eure Stärke.']};
+function generation(geb) { const j = +String(geb || '').slice(0, 4); if (!j) return ''; return j >= 2010 ? 'alpha' : j >= 1997 ? 'z' : j >= 1981 ? 'y' : j >= 1965 ? 'x' : 'boomer'; }
+const meineGen = () => generation((S.profil && S.profil.geb) || ob.geb);
+function genStil() { const s = S.set && S.set.genDesign; if (s && s !== 'auto') return s; const g = meineGen(); return g === 'alpha' || !g ? 'z' : g; }
+sprachStil = function () { const s = S.set && S.set.sprache; if (s && s !== 'auto') return s; const g = meineGen(); return !g || g === 'z' || g === 'alpha' ? 'jung' : g === 'y' ? 'mittel' : 'klassisch'; };
+const _themeAn = themeAn;
+themeAn = function () { _themeAn(); const g = genStil(); if (g === 'z') document.documentElement.removeAttribute('data-gen'); else document.documentElement.setAttribute('data-gen', g); const mc = document.querySelector('meta[name=theme-color]'); if (mc && g !== 'z') mc.content = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || mc.content; };
+/* Design: erst Generation, dann Interessen */
+Object.assign(THEMES, {pastell: ['Pastell', '#6d5bd0', '#b84f8c', '#d4765a', '#7c6ad6', 30]});
+designFuer = function (geb, tags) { const g = generation(geb) || 'z', t = tags || [];
+  const basis = {alpha: 'neon', z: 'neon', y: 'pastell', x: 'klassik', boomer: 'klassik'}[g];
+  const nachInteresse = t.includes('beauty') ? 'rose' : t.includes('fussball') ? 'stadion' : t.includes('gaming') && (g === 'z' || g === 'alpha') ? 'neon' : (t.includes('natur') || t.includes('tiere') || t.includes('garten')) ? 'wald' : t.includes('business') ? 'gold' : t.includes('handwerk') ? 'sand' : t.includes('kreativ') || t.includes('familie') ? 'sunset' : t.includes('technik') ? 'matrix' : (t.includes('ruhe') || t.includes('gesundheit')) ? 'ocean' : t.includes('reisen') ? 'sunset' : basis;
+  return {theme: nachInteresse, modus: g === 'z' || g === 'alpha' ? 'dunkel' : 'hell', schrift: g === 'boomer' ? 1.15 : g === 'x' ? 1.05 : 1}; };
+/* Mehr Interessen – damit sich alle wiederfinden, nicht nur Jüngere */
+Object.assign(INTERESSEN, {
+  familie: ['👨‍👩‍👧', 'Familie & Kinder', {money: 2, body: 1}, [['📞', 'Familie oder Freunde angerufen'], ['🍽️', 'Gemeinsam gegessen ohne Handy']], ['Familien-Tipp: Ein gemeinsames Sparziel (z. B. Urlaub) motiviert alle – trag es hier ein und spart zusammen.']],
+  garten: ['🌻', 'Garten & Pflanzen', {body: 2}, [['🌻', '15 Min. im Garten'], ['🌳', 'An der frischen Luft']], ['Gartenarbeit zählt als Bewegung – trag sie als Workout ein. Ableger und Samen lassen sich übrigens gut verkaufen.']],
+  handwerk: ['🔨', 'Handwerk & Selbermachen', {hustle: 2, body: 1}, [['🔨', 'Etwas repariert statt neu gekauft']], ['Reparieren statt neu kaufen spart Geld – und wer geschickt ist, kann Nachbarn gegen Bezahlung helfen.']],
+  kreativ: ['🎨', 'Kreativ & Kunst', {brain: 1, hustle: 1}, [['🎨', '15 Min. kreativ gewesen']], ['Selbstgemachtes (Karten, Schmuck, Bilder) lässt sich online oder auf Märkten verkaufen.']],
+  technik: ['💻', 'Technik & KI', {brain: 2, hustle: 1}, [['💻', '15 Min. etwas Neues über Technik gelernt']], ['Technik-Wissen ist gefragt: Viele zahlen gern für Hilfe beim Einrichten von Handy, WLAN oder Fernseher.']],
+  autos: ['🚗', 'Autos & Motorrad', {money: 1, hustle: 1}, [['🚗', 'Fahrtkosten im Blick behalten']], ['Tankkosten als Ausgabe eintragen – so siehst du, was dein Auto im Monat wirklich kostet.']],
+  gesundheit: ['❤️', 'Gesundheit & Wohlbefinden', {body: 2, brain: 1}, [['🚶', '30 Min. spazieren'], ['💧', '8 Gläser Wasser'], ['😴', '7 Std. Schlaf']], ['Kleine tägliche Gewohnheiten wirken stärker als große Vorsätze – fang mit einer an.']]});
+HANDY_IDEEN.push(['🔨', 'Reparieren & Aufbauen', 'Möbel aufbauen, Kleinigkeiten reparieren, Bilder aufhängen – in der Nachbarschaft gefragt.', 'handwerk'], ['💻', 'Technik-Hilfe', 'Handy, WLAN, Fernseher oder Drucker für andere einrichten – besonders Ältere freuen sich über geduldige Hilfe.', 'technik'], ['🎨', 'Selbstgemachtes verkaufen', 'Karten, Schmuck, Bilder oder Gestricktes – online oder auf Märkten.', 'kreativ'], ['🌻', 'Pflanzen & Ableger', 'Ableger, Samen oder Gemüse aus dem Garten an Nachbarn verkaufen.', 'garten']);
+/* geschlechtsneutrale Titel und Namen */
+TITEL[TITEL.indexOf('Macher')] = 'Rakete';
+SPRACHE.klassisch = SPRACHE.klassisch.map(([r, x]) => [r, x === 'Macher' ? 'Talent' : x === 'Durchstarter' ? 'Ass' : x]);
+const _nv = nameVorschlag;
+nameVorschlag = function (v) { let n; do { n = _nv(v); } while (/^(King|Queen|Sir|Lord)/.test(n)); return n; };
+/* Generation im Lebens-Level anzeigen */
+const _lk = lebensKarte;
+lebensKarte = function (geb, gross) { const c = _lk(geb, gross); const g = GENERATIONEN[generation(geb)]; if (c && g) c.append(h('div', {style: 'margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.25)'}, h('b', {}, '🧬 ' + g[0] + ' (' + g[1] + ')'), h('div', {cls: 'sm'}, g[2]))); return c; };
+/* Einstellungen: Design-Stil wählbar */
+const _fde2 = fuerDichEinstellungen;
+fuerDichEinstellungen = function (root) { _fde2(root); const c = h('div', {cls: 'card'}, h('h2', {}, '🧬 Design-Stil'), h('div', {cls: 'sm mut'}, 'Automatisch passend zu deiner Generation – oder selbst wählen.'));
+  const ch = h('div', {cls: 'chips', style: 'margin-top:8px'}); [['auto', '🤖 Automatisch'], ['z', '⚡ Neon (Gen Z)'], ['y', '🌸 Soft (Millennials)'], ['x', '📐 Klar (Gen X)'], ['boomer', '🔍 Groß & deutlich']].forEach(([id, n]) => ch.append(h('button', {cls: 'chip' + ((S.set.genDesign || 'auto') === id ? ' on' : ''), on: {click: () => { S.set.genDesign = id; save(); themeAn(); render(); }}}, n)));
+  c.append(ch); root.append(c); };
+themeAn();
 
 const _me = me;
 me = function (root) { _me(root); const k = S.profil && S.profil.geb ? lebensKarte(S.profil.geb) : null; if (k) { const erste = root.querySelector('.card'); if (erste) erste.after(k); } };
