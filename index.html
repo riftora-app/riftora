@@ -916,7 +916,7 @@ function onboarding(root) {
     box.append(dots, h('h1', {}, jung ? 'Wofür grindest du?' : 'Wofür sparst du?'), h('p', {cls: 'mut'}, 'Dein erstes Ziel – jeder Euro bringt dich näher.'), vor, zi, be,
       weiter('Spiel starten 🚀', () => { const b = num(ob.betrag); if (!String(ob.ziel || '').trim() || b <= 0) { toast('Ziel und Betrag eintragen 🎯'); return; }
         S = neuState(); S.user = {name: ob.name.trim(), emoji: ob.emoji, seit: heute()}; S.set.bereiche = Object.assign({}, ob.bereiche); S.ziele.push({id: uid(), titel: ob.ziel.trim(), betrag: b, gespart: 0});
-        S.profil = {geb: ob.geb || '', tags: ob.tags.slice(), stufe: ob.stufe, nutz: {}, weg: [], ok: []}; const alle = gewVorschlaege(12).concat(GEW_VORSCHLAG); (ob.gew || []).forEach(t => { const x = alle.find(y => y[1] === t); S.gew.push({id: uid(), name: t, emoji: x ? x[0] : '✅', tage: []}); });
+        S.profil = {geb: ob.geb || '', tags: ob.tags.slice(), stufe: ob.stufe, nutz: {}, weg: [], ok: [], designNeu: true}; const alle = gewVorschlaege(12).concat(GEW_VORSCHLAG); (ob.gew || []).forEach(t => { const x = alle.find(y => y[1] === t); S.gew.push({id: uid(), name: t, emoji: x ? x[0] : '✅', tage: []}); });
         S.login = heute(); seasonCheck(); bossCheck(); save(); profilZaehlen(); konfetti(); tab = 'home'; render(); setTimeout(() => toast('Willkommen, ' + S.user.name + '! Deine ersten Schritte warten 🚀'), 300); }), zurueck());
   }
 }
@@ -1034,6 +1034,34 @@ if (S.set && S.set.avaHat) S.set.avaHat.forEach(e => { if (!AVATARE.includes(e))
 
 /* ---------- Vorschau ohne Anmeldung ---------- */
 if (window.__VORSCHAU__) { const b = h('div', {style: 'position:fixed;top:0;left:0;right:0;z-index:998;background:#facc15;color:#111;font:600 12px system-ui;padding:6px 10px;display:flex;gap:8px;align-items:center;justify-content:center'}, '👀 Vorschau ohne Anmeldung – nur auf diesem Gerät', h('button', {style: 'border:0;border-radius:8px;padding:3px 8px;font-weight:700;cursor:pointer', on: {click: () => { try { localStorage.removeItem(KEY); } catch (e) {} location.reload(); }}}, '↺ Neu starten')); document.body.append(b); document.body.style.paddingTop = '28px'; }
+
+/* ---------- Sprache passend zur Lebensphase ---------- */
+const SPRACHE = {
+  mittel: [[/Daily Quests/g, 'Tagesaufgaben'], [/\bHustle-Tipps\b/g, 'Tipps zum Nebenverdienst'], [/\bHustle\b/g, 'Nebenverdienst'], [/\bMoney\b/g, 'Finanzen'], [/\bBody\b/g, 'Fitness'], [/\bBrain\b/g, 'Lernen'], [/Fokus\. Grind\. Repeat\./g, 'Fokus. Dranbleiben. Wiederholen.'], [/Let’s go\./g, 'Auf geht’s.'], [/Zeit zu grinden\./g, 'Zeit, loszulegen.'], [/Wofür grindest du\?/g, 'Wofür sparst du?'], [/Weiter grinden/g, 'Weiter so']],
+  klassisch: [[/Season-Pass/g, 'Monats-Pass'], [/Season-Trophäen/g, 'Monats-Trophäen'], [/Season-Titel/g, 'Monats-Titel'], [/\bSeason\b/g, 'Monat'], [/Daily Quests/g, 'Tagesaufgaben'], [/\bQuests?\b/g, 'Aufgabe'], [/Wochen-Boss/g, 'Wochen-Herausforderung'], [/\bBosse\b/g, 'Herausforderungen'], [/\bBoss\b/g, 'Herausforderung'],
+    [/\bHustle-Tipps\b/g, 'Tipps zum Dazuverdienen'], [/\bHustle-Idee\b/g, 'Idee'], [/\bHustle\b/g, 'Nebenbei verdienen'], [/\bMoney\b/g, 'Finanzen'], [/\bBody\b/g, 'Fit bleiben'], [/\bBrain\b/g, 'Kopf & Lernen'], [/\bHome\b/g, 'Start'], [/\bXP\b/g, 'Punkte'], [/\bCoins\b/g, 'Münzen'], [/\bShop\b/g, 'Laden'], [/Freunde-Liga/g, 'Freunde-Rangliste'], [/\bLiga\b/g, 'Rangliste'],
+    [/Wofür grindest du\?/g, 'Wofür sparst du?'], [/Weiter grinden 🚀/g, 'Weiter so 🚀'], [/\bgrinden\b/g, 'dranbleiben'], [/\bGrind\b/g, 'Ausdauer'], [/Let’s go\./g, 'Auf geht’s.'], [/\bLEVEL UP\b/g, 'AUFGESTIEGEN'], [/\bHustler\b/g, 'Macher'], [/\bGrinder\b/g, 'Durchstarter'], [/\bRookie\b/g, 'Neuling'], [/\bFeedback\b/g, 'Rückmeldung'], [/\bDuo\b/g, 'Zu zweit'], [/Was willst du leveln\?/g, 'Was möchtest du verbessern?'], [/Was willst du leveln/g, 'Was möchtest du verbessern']]};
+const NAV_KURZ = {mittel: {Nebenverdienst: 'Verdienen'}, klassisch: {'Nebenbei verdienen': 'Verdienen', 'Fit bleiben': 'Fit', 'Kopf & Lernen': 'Lernen'}};
+function sprachStil() { const s = S.set && S.set.sprache; if (s && s !== 'auto') return s; const band = alterBand((S.profil && S.profil.geb) || ob.geb); return ['16-19', '20-29', ''].includes(band) ? 'jung' : band === '30-39' ? 'mittel' : 'klassisch'; }
+function sprachAnpassen(wurzel) { const st = sprachStil(); const reg = SPRACHE[st]; if (!reg) return; const w = document.createTreeWalker(wurzel, NodeFilter.SHOW_TEXT, {acceptNode: n => n.parentElement && !/^(SCRIPT|STYLE|TEXTAREA|INPUT)$/.test(n.parentElement.tagName) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT});
+  let n; while ((n = w.nextNode())) { let v = n.nodeValue, neu = v; if (!/[A-Za-z]/.test(v)) continue; reg.forEach(([r, x]) => { neu = neu.replace(r, x); }); if (n.parentElement.closest('#nav') && NAV_KURZ[st] && NAV_KURZ[st][neu.trim()]) neu = NAV_KURZ[st][neu.trim()]; if (neu !== v) n.nodeValue = neu; } }
+let sprachPlan = 0; new MutationObserver(() => { if (sprachPlan) return; sprachPlan = requestAnimationFrame(() => { sprachPlan = 0; sprachAnpassen(document.body); }); }).observe(document.body, {childList: true, subtree: true});
+
+/* ---------- Design passend zu Alter & Interessen ---------- */
+Object.assign(THEMES, {klassik: ['Klassik', '#1d4ed8', '#0ea5e9', '#38bdf8', '#3b82f6', 30], rose: ['Rosé', '#db2777', '#f472b6', '#fbcfe8', '#ec4899', 30], wald: ['Wald', '#15803d', '#22c55e', '#bef264', '#16a34a', 30], stadion: ['Stadion', '#166534', '#16a34a', '#facc15', '#22c55e', 30], sand: ['Sand', '#b45309', '#d97706', '#fcd34d', '#f59e0b', 30]});
+function designFuer(geb, tags) { const band = alterBand(geb), t = tags || []; const thema = t.includes('beauty') ? 'rose' : t.includes('fussball') ? 'stadion' : t.includes('gaming') && ['16-19', '20-29', '30-39', ''].includes(band) ? 'neon' : (t.includes('natur') || t.includes('tiere')) ? 'wald' : t.includes('business') ? 'gold' : t.includes('ruhe') ? 'ocean' : t.includes('reisen') ? 'sunset' : ({'16-19': 'neon', '20-29': 'neon', '30-39': 'ocean', '40-49': 'klassik', '50-59': 'sand', '60+': 'klassik'})[band] || 'neon';
+  return {theme: thema, modus: ['50-59', '60+'].includes(band) ? 'hell' : 'dunkel', schrift: band === '60+' ? 1.15 : band === '50-59' ? 1.08 : 1}; }
+function designAnwenden(geb, tags) { const d = designFuer(geb, tags); S.set.theme = d.theme; if (!S.set.themes.includes(d.theme)) S.set.themes.push(d.theme); S.set.modus = d.modus; S.set.schrift = d.schrift; themeAn(); return d; }
+const _onb = onboarding;
+onboarding = function (root) { if (obStep >= 1 && (ob.geb || (ob.tags && ob.tags.length))) { const d = designFuer(ob.geb, ob.tags); if (S.set.theme !== d.theme || S.set.modus !== d.modus) { S.set.theme = d.theme; S.set.modus = d.modus; S.set.schrift = d.schrift; themeAn(); } } _onb(root); };
+/* nach dem Einstieg: Design übernehmen */
+const _gibStart = profilZaehlen;
+profilZaehlen = function () { if (S.user && S.profil && S.profil.designNeu && !S.profil.designGesetzt) { S.profil.designGesetzt = true; designAnwenden(S.profil.geb, S.profil.tags); save(); } _gibStart(); };
+const _fde = fuerDichEinstellungen;
+fuerDichEinstellungen = function (root) { _fde(root); const p = profil(); const c = h('div', {cls: 'card'}, h('h2', {}, '🎨 Design & Sprache'), h('div', {cls: 'sm mut'}, 'Riftora passt Farben, Schriftgröße und Wörter an deine Lebensphase und Interessen an.'));
+  c.append(h('button', {cls: 'btn sec', style: 'margin-top:8px', on: {click: () => { const d = designAnwenden(p.geb, p.tags); save(); toast('🎨 Design „' + THEMES[d.theme][0] + '“ übernommen'); render(); }}}, '🎨 Design passend zu mir'));
+  const sp = h('div', {cls: 'chips', style: 'margin-top:8px'}); [['auto', '🤖 Automatisch'], ['jung', '🎮 Gamer-Sprache'], ['mittel', '🙂 Gemischt'], ['klassisch', '📖 Klassisch Deutsch']].forEach(([id, n]) => sp.append(h('button', {cls: 'chip' + ((S.set.sprache || 'auto') === id ? ' on' : ''), on: {click: () => { S.set.sprache = id; save(); location.reload(); }}}, n)));
+  c.append(h('div', {cls: 'sm mut', style: 'margin-top:10px'}, 'Sprache der App'), sp); root.append(c); };
 
 const _me = me;
 me = function (root) { _me(root); const k = S.profil && S.profil.geb ? lebensKarte(S.profil.geb) : null; if (k) { const erste = root.querySelector('.card'); if (erste) erste.after(k); } };
