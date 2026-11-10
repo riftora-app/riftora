@@ -1,0 +1,3 @@
+<resources>
+  <style name="Launch" parent="android:Theme.Translucent.NoTitleBar"/>
+</resources>
